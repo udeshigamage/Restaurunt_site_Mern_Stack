@@ -21,7 +21,7 @@ const Dishes = () => {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 4,
     initialSlide: 0,
     responsive: [
@@ -52,7 +52,7 @@ const Dishes = () => {
     ],
   };
   return (
-    <div className="max-w-screen-2xl container  xl:px-24 px-4  border-r-8  rounded-3xl py-16">
+    <div className="max-w-screen-2xl container  xl:px-24 px-4  border-r-8   py-16">
       <div className="">
         <p className="text-[#7a1f12] uppercase tracking-wide font-medium text-lg">
           special dishes

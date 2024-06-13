@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import th from "/th.jpg";
 import { FaSearch } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCall } from "react-icons/io5";
+import Menu from "../Pages/shop/Menu";
+import { IoPersonSharp } from "react-icons/io5";
+import Modal from "./Modal";
+import Modaln from "./Modaln";
+import { AuthContext } from "../contexts/AuthProvider";
 const Navbar = () => {
   const [isSticky, setSticky] = useState(false);
+  const { user } = useContext(AuthContext);
+  console.log(user);
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.screenY;
@@ -69,17 +76,17 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Home</a>
+            <a href="/">Home</a>
           </li>
           <li>
             <details>
               <summary>Menu</summary>
               <ul className="p-2">
                 <li>
-                  <a>All</a>
+                  <a href="/menu">All</a>
                 </li>
                 <li>
-                  <a>Sallad</a>
+                  <a href="/menu/salad">Sallad</a>
                 </li>
                 <li>
                   <a>Pizza</a>
@@ -115,10 +122,16 @@ const Navbar = () => {
         <a className="btn mr-3 ml-3">
           <FaShoppingCart />
         </a>
-        <a className="btn bg-gray-500 px-6 rounded-full gap-2 mr-3 ">
-          <IoCall />
-          contact
-        </a>
+
+        <button
+          className=" btn bg-gray-500 px-8 py-3 font-semibold text-black rounded-full"
+          onClick={() => document.getElementById("my_modal_3").showModal()}
+        >
+          <IoPersonSharp />
+          Login
+        </button>
+
+        <Modaln />
       </div>
     </div>
   );
