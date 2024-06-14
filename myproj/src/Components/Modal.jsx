@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import Signup from "./Signup";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthProvider";
 
 const Modal = () => {
   const {
@@ -13,7 +14,17 @@ const Modal = () => {
 
     formState: { errors },
   } = useForm();
+
+  const { signupwithgmail } = useContext(AuthContext);
   const onSubmit = (data) => console.log(data);
+  const handlelogin = () => {
+    signupwithgmail()
+      .then((result) => {
+        const user = result.user;
+        alert("login successfull");
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <div>
       <form className="card-body " onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +76,7 @@ const Modal = () => {
           <div className="">
             <FaFacebook />
           </div>
-          <div className="">
+          <div className="" onClick={handlelogin}>
             <FaGoogle />
           </div>
           <div className="">

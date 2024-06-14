@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import Signup from "./Signup";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthProvider";
 
 const Modaln = () => {
   const {
@@ -13,7 +14,35 @@ const Modaln = () => {
 
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const { signupwithgmail, login } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const onSubmit = (data) => {
+    const email = data.email;
+    const password = data.password;
+    // console.log(email, password)
+    login(email, password)
+      .then((result) => {
+        const user = result.user;
+        alert("Login successfull");
+        document.getElementById("my_modal_3").close();
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        setErrorMessage("Provide a correct email and password!");
+      });
+  };
+  const handleLogin = () => {
+    signupwithgmail()
+      .then((result) => {
+        const user = result.user;
+        alert("Login successfull!");
+        // navigate(from, {replace: true})
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <div>
       <dialog id="my_modal_3" className="modal">
@@ -55,6 +84,11 @@ const Modaln = () => {
                 </a>
               </label>
             </div>
+            {errorMessage ? (
+              <p className="text-red text-xs italic">{errorMessage}</p>
+            ) : (
+              ""
+            )}
             <div className="form-control mt-6">
               <button className="btn btn-primary">Login</button>
             </div>
@@ -74,9 +108,9 @@ const Modaln = () => {
             <div className="">
               <FaFacebook />
             </div>
-            <div className="">
+            <button className="" onClick={handleLogin}>
               <FaGoogle />
-            </div>
+            </button>
             <div className="">
               <FaGithub />
             </div>

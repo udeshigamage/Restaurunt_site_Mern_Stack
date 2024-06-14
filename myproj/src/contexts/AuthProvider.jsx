@@ -1,10 +1,20 @@
-import React, { createContext, useState } from "react";
-import { GoogleAuthProvider } from "firebase/auth";
-import { getAuth } from "firebase/auth";
+import React, { createContext, useEffect, useState } from "react";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  onAuthStateChanged,
+} from "firebase/auth";
+
 import app from "../firebase/firbase.config";
+
 export const AuthContext = createContext();
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+const googleprovider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
   const [loading, setloading] = useState(true);
@@ -15,10 +25,10 @@ const AuthProvider = ({ children }) => {
   };
   //signup with gmail account
   const signupwithgmail = () => {
-    return signInWithPopup(auth, provider);
+    return signInWithPopup(auth, googleprovider);
   };
   //login
-  const login = () => {
+  const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -34,13 +44,27 @@ const AuthProvider = ({ children }) => {
       photoURL: photourl,
     });
   };
+  //check signed in user
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      // console.log(currentUser);
+      setuser(currentUser);
+      setloading(false);
+    });
+
+    return () => {
+      return unsubscribe();
+    };
+  }, []);
 
   const authinfo = {
     user,
     createuser,
     signupwithgmail,
     login,
+    logout,
     updateuserprofile,
+    loading,
   };
   return (
     <AuthContext.Provider value={authinfo}>{children}</AuthContext.Provider>
